@@ -31,5 +31,46 @@ module.exports = {
         }
     },
 
-    
+    list_voiture: function(req, res){
+        console.log("==> LIST VOITURE");
+        connexion.then(function(dbo){
+            dbo.collection("voiture").find({}, {projection:{type:1, matricule:1, annee_creation:1}}).toArray(function(err, resultats){
+                if(err) return res.status(500).send({error:"Ressource"});
+                if(resultats.length){
+                    res.send(resultats);
+                }
+                else{
+                    res.send([]);
+                }
+            })
+        })
+    },
+
+    get_voiture: function(req, res){
+        console.log("GET VOITURE");
+        var id_user = req.query.id_user, id_voiture = req.query.id_voiture;
+        if(id_user && id_voiture){
+            connexion.then(function(dbo){
+                service.findUser(false, id_user, dbo).then(function(user){
+                    if(user){
+                        service.findVoiture(id_voiture, dbo).then(function(resultat){
+                            if(resultat){
+                                res.send(resultat);
+                            }
+                            else{
+                                res.status(403).send({error:"Voiture introuvable"});
+                            }
+                        })
+                    }
+                    else{
+                        res.status(403).send({error:"Utilisateur introuvable"});
+                    }
+                })
+            })
+        }
+        else{
+            res.status(403).send({error:"Information insuffisante"});
+        }
+    }
+
 }

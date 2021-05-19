@@ -38,6 +38,20 @@ module.exports = {
         })
     },
 
+    findVoiture: function(id_voiture, dbo){
+        return new Promise(function(resolve){
+            dbo.collection("voiture").findOne({_id: new mongo.ObjectID(id_voiture)}, function(err, resultat){
+                if(err) throw(err);
+                if(resultat){
+                    resolve(resultat);
+                }
+                else{
+                    resolve(false);
+                }
+            })
+        })
+    },
+
     uploadfile: function(chemin, fichier){
         let uploadPath, current_time = new Date().getTime(), nom_img;
 
