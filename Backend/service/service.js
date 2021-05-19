@@ -36,5 +36,27 @@ module.exports = {
                 resolve(false);
             }
         })
-    }
+    },
+
+    uploadfile: function(chemin, fichier){
+        let uploadPath, current_time = new Date().getTime(), nom_img;
+
+        if (!fichier) {
+            console.log('No files were uploaded')
+            return false;
+        }
+
+        let fichier_name = fichier.name.split('.');
+        let ext = fichier_name[fichier_name.length-1];
+        nom_img = "voiture_" + current_time+"."+ext;
+        uploadPath = chemin + nom_img;
+        // Use the mv() method to place the file somewhere on your server
+
+        fichier.mv(uploadPath, function(err) {
+            if (err) return err;
+            console.log('===> File uploaded :' + uploadPath);
+        });
+
+        return uploadPath;
+    },
 }
