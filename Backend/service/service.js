@@ -22,7 +22,7 @@ module.exports = {
         return new Promise(function(resolve){
             if(email || id){
                 let condition = email ? {email:email} : {_id: new mongo.ObjectID(id)};
-                dbo.collection("user").findOne(condition, {$projection:{nom:1, prenom:1, email:1, date_inscription:1, date_modification:1}}, function(err, resultat){
+                dbo.collection("user").findOne(condition, function(err, resultat){
                     if(err) throw(err);
                     if(resultat){
                         resolve(resultat);

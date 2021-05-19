@@ -11,17 +11,6 @@ module.exports = {
         res.send("Bonjour!");
     },
 
-    list: function(req, res){
-        console.log("==> GET LIST");
-        connexion.then(function(dbo){
-            dbo.collection("user").find({}, { projection: { _id: 0, nom: 1, prenom: 1 } }).toArray(function(err, resultats){
-                if(err) res.status(500).send("Error: ressource");
-                console.log("==> FIN GET LIST");
-                res.status(200).send(resultats);
-            })
-        })
-    },
-
     inscrire: function(req, res){
         console.log("==> POST INSCRIRE USER");
         var nom = req.body.nom, prenom = req.body.prenom, email = req.body.email, mdp1 = req.body.password, mdp2 = req.body.confirmation_password, date_inscription = new Date();
@@ -65,5 +54,36 @@ module.exports = {
             res.status(403).send({error:"Information insuffisante"});
         }
     },
+
+    login: function(req, res){
+        console.log("==> LOGIN POST");
+        var email = req.body.email, mdp = req.body.password;
+        if(email && mdp){
+            connexion.then(function(dbo){
+                service.findUser(email, false, dbo).then(function(user){
+                    if(user){
+                        bcrypt.compare(mdp, user.password, function(err, verification) {
+                            if(verification){
+                                const token = jwt.sign({
+                                    id: user._id,
+                                    mail: user.email,
+                                }, SECRET, { expiresIn:'7d'})
+                                res.send({token: token, nom: user.nom, prenom: user.prenom, email: user.email});
+                            }
+                            else{
+                                res.status(403).send({error:"Mot de passe incorrecte"});
+                            }
+                        });
+                    }
+                    else{
+                        res.status(403).send({error:"Adresse email incorrecte"});
+                    }
+                })
+            })
+        }
+        else{
+            res.status(403).send({error:"Information insuffisante"});
+        }
+    }
 
 }
