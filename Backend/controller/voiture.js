@@ -47,6 +47,20 @@ module.exports = {
     },
 
     /*
+    supprimer_voiture: function(req, res){
+        console.log("==> POST SUPPRIMER UN VOITURE");
+        var id_voiture = req.body.id_voiture, id_user = req.body.id_user;
+        if(id_voiture && id_user){
+            connexion.then(function(dbo){
+                dbo.collection("voiture").findOneAndDelete({})
+            })
+        }
+        else{
+            res.status(403).send({error:"Information insuffisante"});
+        }
+    }
+
+    /*
     get_voiture: function(req, res){
         console.log("GET VOITURE");
         var id_user = req.query.id_user, id_voiture = req.query.id_voiture;

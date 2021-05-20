@@ -5,12 +5,12 @@ function verify_token(req, res, next){
     const token = req.headers.authorization ? req.headers.authorization.replace("Accessing ", "") : false;
     // Présence d'un token
     if (!token) {
-        res.status(401).json({ message: 'Error: Need a token' });
+        res.status(401).json({ erreur: "Il n'y a pas de token" });
     }
 
     // Véracité du token
     jwt.verify(token, SECRET, (err, decodedToken) => {
-        if (err) res.status(401).json({ message: 'Error: Bad token' })
+        if (err) res.status(401).json({ erreur: "Mauvaise token" })
         next()
     })
 }

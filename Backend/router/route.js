@@ -14,9 +14,11 @@ module.exports = function(router) {
     //VOITURE
     router.post("/api/v1/creation", voiture.creation);
     router.get("/api/v1/list", voiture.list_voiture);
-    router.get("/api/v1/get_voiture", voiture.get_voiture);
+    //router.get("/api/v1/get_voiture", voiture.get_voiture);
 
     //COMMENTAIRE
     router.post("/api/v1/commenter", commentaire.commenter);
     router.get("/api/v1/get_voiture_commentaire", commentaire.get_voiture_commentaire);
+    router.post("/api/v1/modifier_commentaire", commentaire.modifier_commentaire);
+    router.post("/api/v1/supprimer_commentaire", commentaire.supprimer_commentaire);
 };

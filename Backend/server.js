@@ -6,7 +6,7 @@ const fileUpload = require('express-fileupload')
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', '*');
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'https://app.mada-prometeurs.com/*');
     next();
 });
 app.use(fileUpload());

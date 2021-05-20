@@ -51,13 +51,13 @@ module.exports = {
                                         service.findUser(false, resultats[i].id_user, dbo).then(function(user_coms){
                                             commentaire_user.push({commentaire :resultats[i].commentaire, nom: user_coms.nom, prenom: user_coms.prenom});
                                             if(resultats.length - 1 == i){
-                                                res.send({comments:commentaire_user, voiture: voiture});
+                                                res.send({voiture: voiture, commentaires:commentaire_user});
                                             }
                                         })
                                     }
                                 }
                                 else{
-                                    res.send({commentaire:resultats, voiture: voiture});
+                                    res.send({voiture: voiture, commentaires:resultats});
                                 }
                             })
                         }
@@ -67,6 +67,48 @@ module.exports = {
                     }
                     else{
                         res.status(403).send({error:"Voiture introuvable"});
+                    }
+                })
+            })
+        }
+        else{
+            res.status(403).send({error:"Information insuffisante"});
+        }
+    },
+
+    modifier_commentaire: function(req, res){
+        console.log("==> POST MODIFIER UN COMMENTAIRE");
+        var id_voiture = req.body.id_voiture, id_user = req.body.id_user, commentaire = req.body.commentaire;
+        if(id_voiture && id_user && commentaire){
+            connexion.then(function(dbo){
+                dbo.collection("commentaire").findOneAndUpdate({id_user: new mongo.ObjectID(id_user), id_voiture: new mongo.ObjectID(id_voiture)}, {$set:{commentaire: commentaire}}, function(err, resultat){
+                    if(err) return res.status(500).send({error:"Ressource"});
+                    if(resultat.value){
+                        res.send({success:"Success"});
+                    }
+                    else{
+                        res.send({error:"Commentaire non modifié, vérifier l'existence du commentaire ou l'utilisateur"});
+                    }
+                })
+            })
+        }
+        else{
+            res.status(403).send({error:"Information insuffisante"});
+        }
+    },
+
+    supprimer_commentaire: function(req, res){
+        console.log("==> POST SUPPRIMER COMMENTAIRE");
+        var id_voiture = req.body.id_voiture, id_user = req.body.id_user, commentaire = req.body.commentaire;
+        if(id_voiture && id_user && commentaire){
+            connexion.then(function(dbo){
+                dbo.collection("commentaire").findOneAndDelete({id_user: new mongo.ObjectID(id_user), id_voiture: new mongo.ObjectID(id_voiture), commentaire: commentaire}, function(err, resultat){
+                    if(err) return res.status(500).send({error:"Ressource"});
+                    if(resultat.value){
+                        res.send({success:"Success"});
+                    }
+                    else{
+                        res.send({error:"Commentaire non supprimé, vérifier l'existence du commentaire ou l'utilisateur"});
                     }
                 })
             })
