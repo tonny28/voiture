@@ -9,7 +9,7 @@ module.exports = {
             connexion.then(function(dbo){
                 service.findUser(false, id_user, dbo).then(function(user){
                     if(user){
-                        let path_image = service.uploadfile("public/image/", fichier);
+                        let path_image = service.uploadfile("image/", fichier);
                         if(path_image){
                             dbo.collection("voiture").insertOne({type:type, matricule:matricule, annee_creation:annee_creation, description:description, path:path_image, date_ajout: new Date(), date_modification:null}, function(err){
                                 if(err) return res.status(500).send({error:"Ressource"});
@@ -46,6 +46,7 @@ module.exports = {
         })
     },
 
+    /*
     get_voiture: function(req, res){
         console.log("GET VOITURE");
         var id_user = req.query.id_user, id_voiture = req.query.id_voiture;
@@ -72,5 +73,5 @@ module.exports = {
             res.status(403).send({error:"Information insuffisante"});
         }
     }
-
+    */
 }

@@ -31,7 +31,7 @@ module.exports = {
                                                 id: user._id,
                                                 mail: user.email,
                                             }, SECRET, { expiresIn:'7d'})
-                                            res.send({token: token, nom: user.nom, prenom: user.prenom, email: user.email});
+                                            res.send({token: token, id_user: user._id, nom: user.nom, prenom: user.prenom, email: user.email});
                                         }
                                         else{
                                             res.status(403).send({error:"Utilisateur introuvable"});
@@ -68,7 +68,7 @@ module.exports = {
                                     id: user._id,
                                     mail: user.email,
                                 }, SECRET, { expiresIn:'7d'})
-                                res.send({token: token, nom: user.nom, prenom: user.prenom, email: user.email});
+                                res.send({token: token, id_user: user._id, nom: user.nom, prenom: user.prenom, email: user.email});
                             }
                             else{
                                 res.status(403).send({error:"Mot de passe incorrecte"});
